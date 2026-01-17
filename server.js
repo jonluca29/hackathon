@@ -112,6 +112,10 @@ app.get('/', (req, res) => {
   res.json({ message: 'PharmaCluster API is running!' });
 });
 
+app.get('/health', (req, res) => {
+  res.json({ status: 'healthy', database: 'connected' });
+});
+
 // API endpoint to handle form submission
 app.post('/api/upload-record', async (req, res) => {
   try {
@@ -131,25 +135,23 @@ app.post('/api/upload-record', async (req, res) => {
   }
 });
 
-// Connect to MongoDB and start server
-async function run() {
+// Connect to MongoDB
+async function connectDB() {
   try {
     await mongoose.connect(uri, clientOptions);
     await mongoose.connection.db.admin().command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    
-    // START THE SERVER - this was missing!
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-    
+    console.log("Successfully connected to MongoDB!");
   } catch (error) {
     console.error("MongoDB connection error:", error);
     process.exit(1);
   }
 }
 
-run();
+// Start server FIRST, then connect to DB
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
+  connectDB();
+});
 
 // Export the models
 module.exports = { UserProfile, TrialMetadata, Match };
