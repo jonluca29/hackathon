@@ -1,7 +1,6 @@
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey, SystemProgram } from '@solana/web3.js';
 import { Program, AnchorProvider } from '@coral-xyz/anchor';
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { PROGRAM_ID, IDL } from '../utils/constants';
 
 export function useSolanaProgram() {
@@ -19,7 +18,7 @@ export function useSolanaProgram() {
     const encoder = new TextEncoder();
     const data = encoder.encode(`Verified Medical Trial Consent v1.0 - ${trialName}`);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const agreementHash = Array.from(new Uint8Array(hashBuffer));
+    const agreementHash: number[] = Array.from(new Uint8Array(hashBuffer)); // Explicitly define type
 
     const [consentPDA] = PublicKey.findProgramAddressSync(
       [Buffer.from('consent'), wallet.publicKey!.toBuffer()],
@@ -27,18 +26,30 @@ export function useSolanaProgram() {
     );
 
     return await program.methods
-      .signConsent(agreementHash)
+      .signConsent(agreementHash) // No need to cast
       .accounts({
         consentRecord: consentPDA,
         patient: wallet.publicKey!,
         systemProgram: SystemProgram.programId,
-      } as any).rpc();
+      }).rpc();
   };
 
   const rewardPatient = async (patientPubkey: PublicKey, amount: number) => {
     const program = getProgram();
-    // Logic for finding the vault and token accounts would go here
-    // based on your lib.rs RewardPatient struct
+    const [vaultPDA] = PublicKey.findProgramAddressSync(
+      [Buffer.from('vault'), patientPubkey.toBuffer()],
+      PROGRAM_ID
+    );
+
+    await program.methods
+      .rewardPatient(amount)
+      .accounts({
+        patient: patientPubkey,
+        vault: vaultPDA,
+        systemProgram: SystemProgram.programId,
+      }).rpc();
+
+    console.log(`Rewarding patient: ${patientPubkey.toString()} with amount: ${amount}`);
   };
 
   return { signConsent, rewardPatient };

@@ -5,7 +5,7 @@ import PatientDash from './components/patientDash.tsx';
 import ResearcherAuth from './components/researcherAuth';
 import ResearcherDash from './components/researcherDash';
 import CustomCursor from './components/CustomCursor';
-import VisualThreeD from "./components/VisualThreeD.tsx";
+import { VisualThreeD } from "./components/VisualThreeD.tsx";
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 // // Reusable Feature Card with Hover Effects
@@ -43,7 +43,7 @@ export default function App() {
         <div className="absolute inset-0 bg-grid-pattern pointer-events-none" />
   
         {/* Shared Navbar */}
-        <nav className="relative z-50 flex items-center justify-between px-10 py-6 max-w-7xl mx-auto">
+        <nav className="relative z-50 flex items-center justify-between px-10 pb-10 py-6 max-w-7xl mx-auto">
           <div 
             className="flex items-center gap-3 cursor-pointer group" 
             onClick={() => setView('landing')}
@@ -95,7 +95,6 @@ export default function App() {
                             >
                                 Start Matching
                             </button>
-                            <WalletMultiButton className="btn-primary" />
                         </div>
                     </motion.div>
                     
