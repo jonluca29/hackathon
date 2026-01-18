@@ -1,5 +1,5 @@
 import { BarChart3, Users, Globe, ShieldCheck } from 'lucide-react';
-import { motion} from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export default function ResearcherDash() {
   return (
@@ -12,43 +12,70 @@ export default function ResearcherDash() {
         <StatCard icon={<BarChart3 />} label="Trial Velocity" value="+12.4%" color="text-purple-400" />
       </div>
 
+      {/* Find Candidates Button */}
+      <div className="mb-10 flex justify-end">
+        <button
+          onClick={() => (window.location.href = "/upload-record.html")}
+          className="
+            px-6 py-3 rounded-full
+            bg-indigo-500/10 text-indigo-300
+            border border-indigo-500/30
+            font-bold text-sm uppercase tracking-wider
+            hover:bg-indigo-500/20 hover:border-indigo-400
+            transition-all
+            shadow-[0_0_20px_rgba(99,102,241,0.35)]
+          "
+        >
+          Find Suitable Patients
+        </button>
+      </div>
+
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Main Candidate Table */}
         <div className="lg:col-span-2 p-8 rounded-[2.5rem] bg-white/[0.02] border border-white/10">
           <div className="flex justify-between items-center mb-8">
-             <h3 className="text-xl font-bold text-white">Anonymized Candidate Pool</h3>
-             <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full uppercase tracking-wider">Live Updates</span>
+            <h3 className="text-xl font-bold text-white">Anonymized Candidate Pool</h3>
+            <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full uppercase tracking-wider">
+              Live Updates
+            </span>
           </div>
+
           <div className="space-y-4">
-             <CandidateRow id="DID: 0x82...a1" match={98} tag="Underrepresented Group" />
-             <CandidateRow id="DID: 0xf3...c4" match={92} tag="Regional Priority" />
-             <CandidateRow id="DID: 0xa9...b2" match={89} tag="General Health" />
+            <CandidateRow id="DID: 0x82...a1" match={98} tag="Underrepresented Group" />
+            <CandidateRow id="DID: 0xf3...c4" match={92} tag="Regional Priority" />
+            <CandidateRow id="DID: 0xa9...b2" match={89} tag="General Health" />
           </div>
         </div>
 
-        {/* Diversity Breakdown Visual */}
+        {/* Diversity Breakdown */}
         <div className="p-8 rounded-[2.5rem] bg-indigo-500/5 border border-indigo-500/10 flex flex-col justify-between">
-           <div>
-             <h3 className="text-xl font-bold text-white mb-2">Diversity Metrics</h3>
-             <p className="text-sm text-slate-500">Real-time demographic distribution based on Gemini AI extraction.</p>
-           </div>
-           <div className="space-y-4 mt-8">
-              <ProgressBar label="Ethnic Diversity" progress={88} />
-              <ProgressBar label="Socioeconomic Reach" progress={72} />
-              <ProgressBar label="Age Distribution" progress={95} />
-           </div>
+          <div>
+            <h3 className="text-xl font-bold text-white mb-2">Diversity Metrics</h3>
+            <p className="text-sm text-slate-500">
+              Real-time demographic distribution based on Gemini AI extraction.
+            </p>
+          </div>
+
+          <div className="space-y-4 mt-8">
+            <ProgressBar label="Ethnic Diversity" progress={88} />
+            <ProgressBar label="Socioeconomic Reach" progress={72} />
+            <ProgressBar label="Age Distribution" progress={95} />
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-// Sub-components to keep clean
+/* ---------- Sub-components ---------- */
+
 const StatCard = ({ icon, label, value, color }: any) => (
   <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/5">
     <div className={`${color} mb-3`}>{icon}</div>
     <div className="text-2xl font-black text-white">{value}</div>
-    <div className="text-[10px] uppercase font-bold text-slate-500 tracking-widest">{label}</div>
+    <div className="text-[10px] uppercase font-bold text-slate-500 tracking-widest">
+      {label}
+    </div>
   </div>
 );
 
@@ -59,8 +86,8 @@ const CandidateRow = ({ id, match, tag }: any) => (
       <span className="font-mono text-xs text-slate-400">{id}</span>
     </div>
     <div className="flex items-center gap-4">
-       <span className="text-[10px] text-indigo-400 font-bold uppercase">{tag}</span>
-       <span className="text-white font-bold">{match}% Match</span>
+      <span className="text-[10px] text-indigo-400 font-bold uppercase">{tag}</span>
+      <span className="text-white font-bold">{match}% Match</span>
     </div>
   </div>
 );
@@ -72,7 +99,7 @@ const ProgressBar = ({ label, progress }: any) => (
       <span>{progress}%</span>
     </div>
     <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-      <motion.div 
+      <motion.div
         initial={{ width: 0 }}
         whileInView={{ width: `${progress}%` }}
         className="h-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.4)]"
