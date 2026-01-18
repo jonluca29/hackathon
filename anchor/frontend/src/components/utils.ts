@@ -35,8 +35,8 @@ export type UploadRecordResponse = {
 // In development, requests to /api are proxied to http://localhost:8000
 // In production, set VITE_API_BASE_URL to your backend URL
 const API_BASE = import.meta.env.PROD 
-  ? (import.meta.env.VITE_API_BASE_URL || "http://localhost:8000")
-  : "/api";
+  ? (import.meta.env.VITE_API_BASE_URL || "http://localhost:8001")
+  : "/pharma";
 
 async function safeJson(res: Response) {
   const text = await res.text();

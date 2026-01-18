@@ -18,7 +18,8 @@ load_dotenv()
 app = FastAPI(title="PharmaTrace AI")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
-api_router = APIRouter(prefix="/api")
+# ✅ CHANGED: Remove prefix from router
+api_router = APIRouter()
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(exist_ok=True)
 
@@ -77,10 +78,12 @@ async def upload_medical_record(file: UploadFile = File(...)):
         if file_path.exists(): os.remove(file_path)
         raise HTTPException(status_code=500, detail=str(e))
 
-app.include_router(api_router)
+# ✅ CHANGED: Include router with /api prefix
+app.include_router(api_router, prefix="/pharma")
 
 @app.get("/")
-async def root(): return {"status": "healthy"}
+async def root(): 
+    return {"status": "healthy"}
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)
